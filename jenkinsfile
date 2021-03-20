@@ -1,0 +1,23 @@
+node('master') {
+   stage('Continiuous Doenlad') 
+   {
+    git 'https://github.com/krishnamaggi/Maven.git'
+   }
+   stage('Continiuous Build') 
+   {
+    sh 'mvn package'
+   }
+   stage('Continiuous Deployment') 
+   {
+    sh 'scp /var/lib/jenkins/workspace/pipelinepeject/webapp/target/webapp.war krishna1@192.168.136.131:/var/lib/tomcat/webapps/newtestapp.war'
+   }
+   stage('Continiuous Testing') 
+   {
+    git 'https://github.com/krishnamaggi/FunctionalTesting.git'
+    sh 'java -jar /var/lib/jenkins/workspace/pipelinepeject/testing.jar'
+   }
+   stage('Continiuous Delivery') 
+   {
+    sh 'scp /var/lib/jenkins/workspace/pipelinepeject/webapp/target/webapp.war krishna2@192.168.136.132:/var/lib/tomcat/webapps/newprodapp.war'
+   }
+}
